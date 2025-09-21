@@ -20,14 +20,15 @@ public:
 
 private slots:
     void updateComboBox(const QString &text, int index);
-    void saveQuestionsToDatabase(QLabel *submitLabel);
-
-private:
+    
+    private:
     QList<QComboBox *> comboBoxes;
     QList<QLineEdit *> answerInputs;
     QHash<QComboBox *, QString> previousSelections;
     QHash<QComboBox *, QLineEdit *> savedAnswers;
     QSet<QString> possibleQuestions;
+    void saveQuestionsToDatabase(QLabel *submitLabel);
+    void initializeComboBoxes(QFormLayout *form);
 };
 
 #endif

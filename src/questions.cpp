@@ -33,41 +33,12 @@ Questions::Questions(QWidget *parent) : QWidget(parent) {
     possibleQuestions = QSet<QString>(questionList.begin(), questionList.end());
     QWidget *formWidget = new QWidget(this);
     QFormLayout *form = new QFormLayout(formWidget);
-
-    // Initialize combo boxes and line edits
-    for (int i = 0; i < NUM_QUESTIONS; i++) {
-        QComboBox *comboBox = new QComboBox(this);
-        comboBox->setPlaceholderText("Select a question");
-        comboBox->addItems(possibleQuestions.values());
-
-        QLineEdit *answerInput = new QLineEdit(this);
-        answerInput->setPlaceholderText("Enter answer here");
-
-        previousSelections[comboBox] = QString();
-        comboBoxes.append(comboBox);
-        answerInputs.append(answerInput);
-        form->addRow(comboBox, answerInput);
-        connect(comboBox, &QComboBox::currentTextChanged, this, [this, i](const QString &question) {
-            if (savedAnswers.contains(comboBoxes[i])) {
-                answerInputs[i]->clear();
-                savedAnswers.remove(comboBoxes[i]);
-            }
-            updateComboBox(question, i);
-        });
-        connect(answerInput, &QLineEdit::textChanged, this, [this, i](const QString &text) {
-            if (text.isEmpty() && savedAnswers.contains(comboBoxes[i])) {
-                savedAnswers.remove(comboBoxes[i]);
-                return;
-            }
-            QString question = comboBoxes[i]->currentText();
-            if (!question.isEmpty()) {
-                savedAnswers[comboBoxes[i]] = answerInputs[i];
-            }
-        });
-    }
     QLabel *infoLabel = new QLabel("Please select security questions from the drop downs and answer the following questions: ");
     QLabel *submitLabel = new QLabel();
     QPushButton *submitButton = new QPushButton("Submit", this);
+
+    initializeComboBoxes(form);
+
     connect(submitButton, &QPushButton::clicked, this, [this, submitLabel]() {
         saveQuestionsToDatabase(submitLabel);
     });
@@ -142,4 +113,37 @@ void Questions::saveQuestionsToDatabase(QLabel *submitLabel) {
     SetMaster *page = new SetMaster();
     page->show();
     this->close();
+}
+
+void Questions::initializeComboBoxes(QFormLayout *form) {
+    for (int i = 0; i < NUM_QUESTIONS; i++) {
+        QComboBox *comboBox = new QComboBox(this);
+        comboBox->setPlaceholderText("Select a question");
+        comboBox->addItems(possibleQuestions.values());
+
+        QLineEdit *answerInput = new QLineEdit(this);
+        answerInput->setPlaceholderText("Enter answer here");
+
+        previousSelections[comboBox] = QString();
+        comboBoxes.append(comboBox);
+        answerInputs.append(answerInput);
+        form->addRow(comboBox, answerInput);
+        connect(comboBox, &QComboBox::currentTextChanged, this, [this, i](const QString &question) {
+            if (savedAnswers.contains(comboBoxes[i])) {
+                answerInputs[i]->clear();
+                savedAnswers.remove(comboBoxes[i]);
+            }
+            updateComboBox(question, i);
+        });
+        connect(answerInput, &QLineEdit::textChanged, this, [this, i](const QString &text) {
+            if (text.isEmpty() && savedAnswers.contains(comboBoxes[i])) {
+                savedAnswers.remove(comboBoxes[i]);
+                return;
+            }
+            QString question = comboBoxes[i]->currentText();
+            if (!question.isEmpty()) {
+                savedAnswers[comboBoxes[i]] = answerInputs[i];
+            }
+        });
+    }
 }
