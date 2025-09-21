@@ -6,6 +6,9 @@ Here is a little journal of journey in developing the BCryptic password manager.
 ### Entry 19/09/2025
 Finished the security questions UI page, almost done with the master password entry UI page. Need to encrypt and hash proper information once database entry is completed and tested. Most of my time has been spent understanding how Qt works, and I quite like it so far...
 
+### Entry 20/09/2025
+I always forget to add the newly created files in CMakeLists.txt, so I always end up with the same error on compilation. I'm confused for a few seconds, but then I remember. Never forget...
+
 ## Challenges
 
 ### Environment Setup
