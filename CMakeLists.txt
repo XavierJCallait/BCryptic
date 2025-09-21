@@ -21,6 +21,8 @@ set(SOURCES
     src/database.cpp
     src/questions.cpp
     src/setmaster.cpp
+    src/utils.cpp
+    src/passwords.cpp
 )
 
 set(HEADERS
@@ -28,6 +30,8 @@ set(HEADERS
     include/database.h
     include/questions.h
     include/setmaster.h
+    include/utils.h
+    include/passwords.h
 )
 
 # If you have .ui files, list them here
