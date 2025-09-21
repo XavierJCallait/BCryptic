@@ -6,18 +6,10 @@
 #include <QSettings>
 
 #include "setmaster.h"
+#include "entermaster.h"
 #include "questions.h"
 #include "database.h"
-
-bool hasBeenConfigured() {
-    QSettings settings("BCryptic", "BCrypticApp");
-    return settings.value("configured", false).toBool();
-}
-
-void markAsConfigured() {
-    QSettings settings("BCryptic", "BCrypticApp");
-    settings.setValue("configured", true);
-}
+#include "utils.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
@@ -30,19 +22,17 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    if (!hasBeenConfigured()) {
-        // mainWidget = new SetMaster();
+    if (!Utils::isAppConfigured()) {
         mainWidget = new Questions();
-        markAsConfigured();
+        Utils::markAsConfigured();
+    } else {
+        mainWidget = new EnterMaster();
     }
   
     mainWidget->show();
 
-
-    // FOR DEV TESTING PURPOSES ONLY
-    QSettings settings("BCryptic", "BCrypticApp");
-    settings.setValue("configured", false);
-    // END DEV TESTING PURPOSES ONLY
+    // FOR TESTING PURPOSES ONLY
+    // Utils::markAsUnconfigured(); 
 
 
     return app.exec();
