@@ -54,7 +54,11 @@ Questions::Questions(QWidget *parent) : QWidget(parent) {
             }
             updateComboBox(question, i);
         });
-        connect(answerInput, &QLineEdit::textChanged, this, [this, i]() {
+        connect(answerInput, &QLineEdit::textChanged, this, [this, i](const QString &text) {
+            if (text.isEmpty() && savedAnswers.contains(comboBoxes[i])) {
+                savedAnswers.remove(comboBoxes[i]);
+                return;
+            }
             QString question = comboBoxes[i]->currentText();
             if (!question.isEmpty()) {
                 savedAnswers[comboBoxes[i]] = answerInputs[i];
@@ -120,6 +124,7 @@ void Questions::updateComboBox(const QString &text, int index) {
 }
 
 void Questions::saveQuestionsToDatabase(QLabel *submitLabel) {
+    qDebug() << "Saving questions to database";
     if (savedAnswers.size() != NUM_QUESTIONS) {
         submitLabel->setText("Please select and answer all questions before submitting");
         return;
