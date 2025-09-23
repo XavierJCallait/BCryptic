@@ -9,6 +9,12 @@ Finished the security questions UI page, almost done with the master password en
 ### Entry 20/09/2025
 I always forget to add the newly created files in CMakeLists.txt, so I always end up with the same error on compilation. I'm confused for a few seconds, but then I remember. Never forget...
 
+### Entry 21/09/2025
+I have the flow between pages down, however, now I get to do the actual work of managing passwords and encrypting everything for security. Who would have thought that the business logic is the hard part?
+
+### Entry 22/09/2025
+Creating the vault key and recreating it was a bit more complicated than I was expecting, but it was a cool process to learn. Starting to debug...now for the fun part I guess! ... Actually debugging wasn't too bad, but I'm starting to realize I may need to change the way I handle logic between the different pages. We shall see how it goes...
+
 ## Challenges
 
 ### Environment Setup
