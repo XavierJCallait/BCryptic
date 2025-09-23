@@ -1,9 +1,13 @@
 #include <QLineEdit>
 #include <QLabel>
+#include <QDebug>
 #include <QVBoxLayout>
 #include <QPushButton>
 
 #include "setmaster.h"
+#include "utils.h"
+#include "entermaster.h"
+#include "vault.h"
 
 SetMaster::SetMaster(QWidget *parent) : QWidget(parent) {
     QLabel *titleLabel = new QLabel("Set your Master Password");
@@ -35,12 +39,23 @@ SetMaster::SetMaster(QWidget *parent) : QWidget(parent) {
             submitLabel->setText("Passwords do not match, ensure both fields are the same before submitting");
             return;
         } else {
+            Vault *vault = new Vault();
+            std::array<unsigned char, 32> vk{};
+            vault->setupVault(passwordInput->text().toStdString(), vk);
+
+            std::array<unsigned char, 32> cal_vk = vault->getVaultKey(passwordInput->text().toStdString());
+            qDebug() << "Unlocked VK matches: " << (vk == cal_vk ? "yes" : "no");
+
+            EnterMaster *enterMaster = new EnterMaster();
+            enterMaster->show();
+            Utils::markAsConfigured();
             this->close();
         }
     });
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(titleLabel, 0, Qt::AlignHCenter);
+    layout->addStretch();
     layout->addWidget(infoLabel, 0, Qt::AlignHCenter);
     layout->addStretch();
     layout->addWidget(passwordInput, 0, Qt::AlignHCenter);

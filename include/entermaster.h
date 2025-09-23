@@ -8,9 +8,6 @@ class EnterMaster : public QWidget {
 
     public:
         EnterMaster(QWidget *parent = nullptr);
-
-    private slots:
-        void onButtonClicked();
 };
 
 #endif
