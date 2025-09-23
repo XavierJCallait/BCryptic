@@ -5,8 +5,11 @@
 #include <list>
 #include <sqlite3.h>
 
+#include "vault.h"
+
 #define QUESTIONS_ANSWERS_TABLE "questions_answers"
 #define SALTS_TABLE "salts"
+#define VAULT_TABLE "vault"
 #define DATABASE_NAME "mydb.sqlite"
 
 class Database {
@@ -21,8 +24,10 @@ class Database {
         Database(Database&&) = delete;
         Database& operator=(Database&&) = delete;
 
+        void createTables();
         bool storeQuestions(const std::list<std::pair<std::string, std::string>>& iter);
-
+        bool storeVault(ArgonParams &argonParams, VaultParams &vaultParams);
+        bool fetchVault(ArgonParams &argonParams, VaultParams &vaultParams);
   	private:
         Database();
         ~Database() = default;
