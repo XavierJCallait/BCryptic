@@ -10,6 +10,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
 find_package(SQLite3 REQUIRED)
 
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(SODIUM REQUIRED libsodium)
+
+
 # Handle Qt MOC, UIC, and RCC automatically
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -23,6 +27,8 @@ set(SOURCES
     src/setmaster.cpp
     src/utils.cpp
     src/passwords.cpp
+    src/start.cpp
+    src/vault.cpp
 )
 
 set(HEADERS
@@ -32,6 +38,8 @@ set(HEADERS
     include/setmaster.h
     include/utils.h
     include/passwords.h
+    include/start.h
+    include/vault.h
 )
 
 # If you have .ui files, list them here
@@ -56,12 +64,13 @@ target_link_libraries(${PROJECT_NAME}
     Qt6::Core
     Qt6::Widgets
     SQLite::SQLite3
+    ${SODIUM_LIBRARIES}
 )
 
 # Set target properties
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    WIN32_EXECUTABLE TRUE 
-    # WIN32_EXECUTABLE FALSE
+    # WIN32_EXECUTABLE TRUE 
+    WIN32_EXECUTABLE FALSE
     MACOSX_BUNDLE TRUE
 )
 
