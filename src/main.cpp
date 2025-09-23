@@ -5,11 +5,11 @@
 #include <QDebug>
 #include <QSettings>
 
-#include "setmaster.h"
 #include "entermaster.h"
-#include "questions.h"
+#include "start.h"
 #include "database.h"
 #include "utils.h"
+#include "vault.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
@@ -23,8 +23,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (!Utils::isAppConfigured()) {
-        mainWidget = new Questions();
-        Utils::markAsConfigured();
+        mainWidget = new Start();
     } else {
         mainWidget = new EnterMaster();
     }
@@ -32,8 +31,7 @@ int main(int argc, char *argv[]) {
     mainWidget->show();
 
     // FOR TESTING PURPOSES ONLY
-    // Utils::markAsUnconfigured(); 
-
+    Utils::markAsUnconfigured(); 
 
     return app.exec();
 }

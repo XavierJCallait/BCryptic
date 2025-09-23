@@ -1,4 +1,5 @@
 #include <QSettings>
+#include <sodium.h>
 
 #include "utils.h"
 
@@ -15,4 +16,10 @@ void Utils::markAsConfigured() {
 void Utils::markAsUnconfigured() {
     QSettings settings("BCryptic", "BCrypticApp");
     settings.setValue("configured", false);
+}
+
+std::vector<unsigned char> Utils::generateRandomBytes(size_t length) {
+    std::vector<unsigned char> buffer(length);
+    randombytes_buf(buffer.data(), length);
+    return buffer;
 }
