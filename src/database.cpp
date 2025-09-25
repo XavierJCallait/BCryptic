@@ -72,9 +72,9 @@ bool Database::storeVault(ArgonParams &argonParams, VaultParams &vaultParams) {
     sqlite3_bind_int(stmt, 1, argonParams.algorithm);
     sqlite3_bind_int64(stmt, 2, argonParams.opslimit);
     sqlite3_bind_int64(stmt, 3, argonParams.memlimit);
-    sqlite3_bind_blob(stmt, 4, argonParams.salt.data(), argonParams.salt.size(), SQLITE_STATIC);
-    sqlite3_bind_blob(stmt, 5, vaultParams.aead_nonce.data(), vaultParams.aead_nonce.size(), SQLITE_STATIC);
-    sqlite3_bind_blob(stmt, 6, vaultParams.encrypted_vk.data(), vaultParams.encrypted_vk.size(), SQLITE_STATIC);
+    sqlite3_bind_blob(stmt, 4, argonParams.salt.data(), argonParams.salt.size(), SQLITE_TRANSIENT);
+    sqlite3_bind_blob(stmt, 5, vaultParams.aead_nonce.data(), vaultParams.aead_nonce.size(), SQLITE_TRANSIENT);
+    sqlite3_bind_blob(stmt, 6, vaultParams.encrypted_vk.data(), vaultParams.encrypted_vk.size(), SQLITE_TRANSIENT);
     if (sqlite3_step(stmt) != SQLITE_DONE) {
         qCritical() << "Error executing statement: " << sqlite3_errmsg(database.get());
         sqlite3_finalize(stmt);

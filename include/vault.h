@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include <vector> 
+#include <array>
 
 struct ArgonParams {
     std::vector<unsigned char> salt;
