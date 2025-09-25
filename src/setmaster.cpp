@@ -42,13 +42,9 @@ SetMaster::SetMaster(QWidget *parent) : QWidget(parent) {
             Vault *vault = new Vault();
             std::array<unsigned char, 32> vk{};
             vault->setupVault(passwordInput->text().toStdString(), vk);
-
-            std::array<unsigned char, 32> cal_vk = vault->getVaultKey(passwordInput->text().toStdString());
-            qDebug() << "Unlocked VK matches: " << (vk == cal_vk ? "yes" : "no");
-
+            Utils::markAsConfigured();
             EnterMaster *enterMaster = new EnterMaster();
             enterMaster->show();
-            Utils::markAsConfigured();
             this->close();
         }
     });

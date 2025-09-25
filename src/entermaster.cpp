@@ -2,9 +2,11 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include <QVBoxLayout>
+#include <QDebug>
 
 #include "passwords.h"
 #include "entermaster.h"
+#include "vault.h"
 
 EnterMaster::EnterMaster(QWidget *parent) : QWidget(parent) {
     QLabel *label = new QLabel("Enter your master password to access key vault", this);
@@ -35,8 +37,13 @@ EnterMaster::EnterMaster(QWidget *parent) : QWidget(parent) {
             submitLabel->setText("Password cannot be empty, please enter your master password"); 
             return;
         }
+        
+        Vault *vault = new Vault();
+        std::array<unsigned char, 32> cal_vk = vault->getVaultKey(passwordInput->text().toStdString());
+        
         Passwords *passwords = new Passwords();
         passwords->show();
         this->close();
+
     });
 }
