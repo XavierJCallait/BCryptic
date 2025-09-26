@@ -8,11 +8,11 @@
 #include <string>
 #include <utility>
 
-#include "setmaster.h"
+#include "setmasterw.h"
 #include "database.h"
-#include "questions.h"
+#include "questionsw.h"
 
-Questions::Questions(QWidget *parent) : QWidget(parent) {
+QuestionsW::QuestionsW(QWidget *parent) : QWidget(parent) {
     QStringList questionList = {
       "What was the first concert you attended?",
       "What place did your parents meet?",
@@ -65,7 +65,7 @@ Questions::Questions(QWidget *parent) : QWidget(parent) {
     setLayout(outerLayout);
 }
 
-void Questions::updateComboBox(const QString &text, int index) {
+void QuestionsW::updateComboBox(const QString &text, int index) {
     QComboBox *changedComboBox = comboBoxes[index];
     QString previousText = previousSelections[changedComboBox];
     
@@ -94,7 +94,7 @@ void Questions::updateComboBox(const QString &text, int index) {
     }
 }
 
-void Questions::saveQuestionsToDatabase(QLabel *submitLabel) {
+void QuestionsW::saveQuestionsToDatabase(QLabel *submitLabel) {
     qDebug() << "Saving questions to database";
     if (savedAnswers.size() != NUM_QUESTIONS) {
         submitLabel->setText("Please select and answer all questions before submitting");
@@ -110,12 +110,12 @@ void Questions::saveQuestionsToDatabase(QLabel *submitLabel) {
     }
     Database& database = Database::getInstance();
     database.storeQuestions(question_answer_list);
-    SetMaster *page = new SetMaster();
+    SetMasterW *page = new SetMasterW();
     page->show();
     this->close();
 }
 
-void Questions::initializeComboBoxes(QFormLayout *form) {
+void QuestionsW::initializeComboBoxes(QFormLayout *form) {
     for (int i = 0; i < NUM_QUESTIONS; i++) {
         QComboBox *comboBox = new QComboBox(this);
         comboBox->setPlaceholderText("Select a question");

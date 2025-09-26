@@ -5,8 +5,8 @@
 #include <QDebug>
 #include <QSettings>
 
-#include "entermaster.h"
-#include "start.h"
+#include "entermasterw.h"
+#include "startw.h"
 #include "database.h"
 #include "utils.h"
 #include "vault.h"
@@ -23,15 +23,15 @@ int main(int argc, char *argv[]) {
     }
 
     if (!Utils::isAppConfigured()) {
-        mainWidget = new Start();
+        mainWidget = new StartW();
     } else {
-        mainWidget = new EnterMaster();
+        mainWidget = new EnterMasterW();
     }
   
     mainWidget->show();
 
     // FOR TESTING PURPOSES ONLY
-    Utils::markAsUnconfigured(); 
+    // Utils::markAsUnconfigured(); 
 
     return app.exec();
 }

@@ -3,11 +3,11 @@
 #include <QLineEdit>
 #include <QVBoxLayout>
 
-#include "setmaster.h"
-#include "questions.h"
-#include "start.h"
+#include "setmasterw.h"
+#include "questionsw.h"
+#include "startw.h"
 
-Start::Start(QWidget *parent) : QWidget(parent) {
+StartW::StartW(QWidget *parent) : QWidget(parent) {
     QLabel *titleLabel = new QLabel("Welcome to BCryptic password manager!", this);
     QLabel *infoLabel = new QLabel("Before you begin, you will need to configure an account. In the following pages, you will be asked some security questions and \nto create a master password. The password will not be stored anywhere and your answers to those questions will be stored securely! \nOnce configured, you will simply need to enter your master password each time you open this up, so don't forget it!", this);
     QLabel *submitLabel = new QLabel("Press the button below to continue", this);
@@ -19,9 +19,9 @@ Start::Start(QWidget *parent) : QWidget(parent) {
     continueButton->setFixedWidth(200);
 
     connect(continueButton, &QPushButton::clicked, this, [this]() {
-        // Questions *questions = new Questions();
+        // QuestionsW *questions = new QuestionsW();
         // questions->show();
-        SetMaster *setMaster = new SetMaster();
+        SetMasterW *setMaster = new SetMasterW();
         setMaster->show();
         this->close();
     });

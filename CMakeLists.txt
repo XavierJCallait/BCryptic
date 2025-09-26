@@ -21,24 +21,24 @@ set(CMAKE_AUTORCC ON)
 
 set(SOURCES
     src/main.cpp
-    src/entermaster.cpp
+    src/entermasterW.cpp
     src/database.cpp
-    src/questions.cpp
-    src/setmaster.cpp
+    src/questionsW.cpp
+    src/setmasterW.cpp
     src/utils.cpp
-    src/passwords.cpp
-    src/start.cpp
+    src/passwordsW.cpp
+    src/startW.cpp
     src/vault.cpp
 )
 
 set(HEADERS
-    include/entermaster.h
+    include/entermasterW.h
     include/database.h
-    include/questions.h
-    include/setmaster.h
+    include/questionsW.h
+    include/setmasterW.h
     include/utils.h
-    include/passwords.h
-    include/start.h
+    include/passwordsW.h
+    include/startW.h
     include/vault.h
 )
 
