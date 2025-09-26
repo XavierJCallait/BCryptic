@@ -18,6 +18,12 @@ Creating the vault key and recreating it was a bit more complicated than I was e
 ### Entry 24/09/2025
 Been stuck on a little bug where I can encrypt but not decrypt despite having the same salts and information. I guess I just need to spend a bit more time debugging...
 
+### Entry 25/09/2025
+The bug was using the wrong constants for encrypt/decryption. I swear I'm smart!
+
+### Entry 26/09/2025
+Today we are refactoring the flow between pages to make it more organized and leverage Qt's offerings. It's a good day, so far...
+
 ## Challenges
 
 ### Environment Setup
