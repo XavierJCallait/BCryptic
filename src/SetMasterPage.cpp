@@ -4,12 +4,12 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 
-#include "setmasterw.h"
+#include "SetMasterPage.h"
 #include "utils.h"
-#include "entermasterw.h"
+#include "EnterMasterPage.h"
 #include "vault.h"
 
-SetMasterW::SetMasterW(QWidget *parent) : QWidget(parent) {
+SetMasterPage::SetMasterPage(QWidget *parent) : QWidget(parent) {
     QLabel *titleLabel = new QLabel("Set your Master Password");
     QLabel *infoLabel = new QLabel("You will need to remember this password, as it will be used to access your account\n and encrypt/decrypt your data, the stronger it is, the better! It is recommended to use\n a mix of letters, numbers, and special characters, and size does matter in this case!");
     QLabel *submitLabel = new QLabel();
@@ -44,7 +44,7 @@ SetMasterW::SetMasterW(QWidget *parent) : QWidget(parent) {
             vault->setupVault(passwordInput->text().toStdString(), vk);
             qDebug() << vk.data();
             Utils::markAsConfigured();
-            EnterMasterW *enterMaster = new EnterMasterW();
+            EnterMasterPage *enterMaster = new EnterMasterPage();
             enterMaster->show();
             this->close();
         }

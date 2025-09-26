@@ -1,4 +1,8 @@
 #include "StartupMainWindow.h"
+#include "StartPage.h"
+#include "EnterMasterPage.h"
+#include "SetMasterPage.h"
+#include "QuestionsPage.h"
 
 StartupMainWindow::StartupMainWindow(QWidget *parent) : QMainWindow(parent) {
     stack = new QStackedWidget(this);
@@ -13,25 +17,25 @@ StartupMainWindow::StartupMainWindow(QWidget *parent) : QMainWindow(parent) {
     stack->addWidget(questions);
     stack->addWidget(enterMaster);
 
-    setCentralWdiget(stack);
+    setCentralWidget(stack);
 
-    connect(start, &StartPage::newUserFound, [this]() {
-        stack->setCurrentIndex(Indices::SetMaster);
-    });
+    // connect(start, &StartPage::newUserFound, [this]() {
+    //     stack->setCurrentIndex(Indices::SetMaster);
+    // });
 
-    connect(start, &StartPage::returningUserFound, [this]() {
-        stack->setCurrentIndex(Indices::EnterMaster)
-    });
+    // connect(start, &StartPage::returningUserFound, [this]() {
+    //     stack->setCurrentIndex(Indices::EnterMaster)
+    // });
 
-    connect(setMaster, &SetMasterPage::masterCreated, [this]() {
-        stack->setCurrentIndex(Indices::Questions);
-    });
+    // connect(setMaster, &SetMasterPage::masterCreated, [this]() {
+    //     stack->setCurrentIndex(Indices::Questions);
+    // });
 
-    connect(questions, &QuestionsPage::questionsAnswered, [this]() {
-        stack->setCurrentIndex(Indices::EnterMaster);
-    });
+    // connect(questions, &QuestionsPage::questionsAnswered, [this]() {
+    //     stack->setCurrentIndex(Indices::EnterMaster);
+    // });
 
-    connect(enterMaster, &EnterMasterMasterPage::loginSucceeded, this, [this]() {
-        emit loginSucceed();
-    });
+    // connect(enterMaster, &EnterMasterMasterPage::loginSucceeded, this, [this]() {
+    //     emit loginSucceed();
+    // });
 }

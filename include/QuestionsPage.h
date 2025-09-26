@@ -1,5 +1,5 @@
-#ifndef QUESTIONSW_H
-#define QUESTIONSW_H
+#ifndef QUESTIONSPAGE_H
+#define QUESTIONSPAGE_H
 
 #include <QWidget>
 #include <QComboBox>
@@ -12,11 +12,11 @@
 
 static constexpr int NUM_QUESTIONS = 10;
 
-class QuestionsW : public QWidget {
+class QuestionsPage : public QWidget {
     Q_OBJECT
 
 public:
-    QuestionsW(QWidget *parent = nullptr);
+    QuestionsPage(QWidget *parent = nullptr);
 
 private slots:
     void updateComboBox(const QString &text, int index);

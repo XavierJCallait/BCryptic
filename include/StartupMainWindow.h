@@ -1,16 +1,16 @@
-#ifndef STARTUPMAINWINDOW_H
-#define STARTUPMAINWINDOW_H
+#ifndef STARTUPMAINWINDOWPAGE_H
+#define STARTUPMAINWINDOWPAGE_H
 
 #include <QMainWindow>
 #include <QWidget>
-#include <QStackWidget>
+#include <QStackedWidget>
 
 enum Indices : int {
     Start = 0,
     SetMaster = 1,
     Questions = 2,
     EnterMaster = 3
-}
+};
 
 class StartupMainWindow : public QMainWindow {
     Q_OBJECT
@@ -22,7 +22,7 @@ signals:
     void loginSucceeded();
 
 private:
-    QStackWidget *stack;
-}
+    QStackedWidget *stack;
+};
 
 #endif

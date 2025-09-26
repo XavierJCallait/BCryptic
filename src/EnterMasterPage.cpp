@@ -5,10 +5,10 @@
 #include <QDebug>
 
 #include "passwordsw.h"
-#include "entermasterw.h"
+#include "EnterMasterPage.h"
 #include "vault.h"
 
-EnterMasterW::EnterMasterW(QWidget *parent) : QWidget(parent) {
+EnterMasterPage::EnterMasterPage(QWidget *parent) : QWidget(parent) {
     QLabel *label = new QLabel("Enter your master password to access key vault", this);
 
     QLineEdit *passwordInput = new QLineEdit(this);

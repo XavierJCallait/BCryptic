@@ -20,26 +20,28 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 set(SOURCES
-    src/main.cpp
-    src/entermasterW.cpp
+    src/EnterMasterPage.cpp
     src/database.cpp
-    src/questionsW.cpp
-    src/setmasterW.cpp
+    src/QuestionsPage.cpp
+    src/SetMasterPage.cpp
     src/utils.cpp
     src/passwordsW.cpp
-    src/startW.cpp
+    src/StartPage.cpp
     src/vault.cpp
+    src/StartupMainWindow.cpp
+    src/main.cpp
 )
 
 set(HEADERS
-    include/entermasterW.h
+    include/EnterMasterPage.h
     include/database.h
-    include/questionsW.h
-    include/setmasterW.h
+    include/QuestionsPage.h
+    include/SetMasterPage.h
     include/utils.h
     include/passwordsW.h
-    include/startW.h
+    include/StartPage.h
     include/vault.h
+    include/StartUpMainWindow.h
 )
 
 # If you have .ui files, list them here

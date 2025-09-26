@@ -5,8 +5,8 @@
 #include <QDebug>
 #include <QSettings>
 
-#include "entermasterw.h"
-#include "startw.h"
+#include "EnterMasterPage.h"
+#include "StartPage.h"
 #include "database.h"
 #include "utils.h"
 #include "vault.h"
@@ -23,9 +23,9 @@ int main(int argc, char *argv[]) {
     }
 
     if (!Utils::isAppConfigured()) {
-        mainWidget = new StartW();
+        mainWidget = new StartPage();
     } else {
-        mainWidget = new EnterMasterW();
+        mainWidget = new EnterMasterPage();
     }
   
     mainWidget->show();
