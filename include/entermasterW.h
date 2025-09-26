@@ -6,8 +6,8 @@
 class EnterMasterW : public QWidget {
     Q_OBJECT
 
-    public:
-        EnterMasterW(QWidget *parent = nullptr);
+public:
+    EnterMasterW(QWidget *parent = nullptr);
 };
 
 #endif

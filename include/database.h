@@ -13,31 +13,33 @@
 #define DATABASE_NAME "mydb.sqlite"
 
 class Database {
-    public:
-        static Database& getInstance() {
-            static Database instance;
-            return instance;
+
+public:
+    static Database& getInstance() {
+        static Database instance;
+        return instance;
+    }
+
+    Database(const Database&) = delete;
+    Database& operator=(const Database&) = delete;
+    Database(Database&&) = delete;
+    Database& operator=(Database&&) = delete;
+
+    void createTables();
+    bool storeQuestions(const std::list<std::pair<std::string, std::string>>& iter);
+    bool storeVault(ArgonParams &argonParams, VaultParams &vaultParams);
+    bool fetchVault(ArgonParams &argonParams, VaultParams &vaultParams);
+
+private:
+    Database();
+    ~Database() = default;
+
+	  struct SQLiteCloser {
+        void operator()(sqlite3* db) const {
+            if (db) sqlite3_close(db);
         }
-
-        Database(const Database&) = delete;
-        Database& operator=(const Database&) = delete;
-        Database(Database&&) = delete;
-        Database& operator=(Database&&) = delete;
-
-        void createTables();
-        bool storeQuestions(const std::list<std::pair<std::string, std::string>>& iter);
-        bool storeVault(ArgonParams &argonParams, VaultParams &vaultParams);
-        bool fetchVault(ArgonParams &argonParams, VaultParams &vaultParams);
-  	private:
-        Database();
-        ~Database() = default;
-
-  		  struct SQLiteCloser {
-            void operator()(sqlite3* db) const {
-                if (db) sqlite3_close(db);
-            }
-        };
-        std::unique_ptr<sqlite3, SQLiteCloser> database;
+    };
+    std::unique_ptr<sqlite3, SQLiteCloser> database;
 };
 
 #endif

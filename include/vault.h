@@ -19,6 +19,7 @@ struct VaultParams {
 };
 
 class Vault {
+
 public:
     Vault();
     void setupVault(const std::string &masterPassword, std::array<unsigned char, 32> &vk);

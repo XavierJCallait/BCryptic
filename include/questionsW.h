@@ -21,7 +21,7 @@ public:
 private slots:
     void updateComboBox(const QString &text, int index);
     
-    private:
+private:
     QList<QComboBox *> comboBoxes;
     QList<QLineEdit *> answerInputs;
     QHash<QComboBox *, QString> previousSelections;

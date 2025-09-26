@@ -6,8 +6,8 @@
 class StartW : public QWidget {
     Q_OBJECT
 
-    public:
-        StartW(QWidget *parent = nullptr);
+public:
+    StartW(QWidget *parent = nullptr);
 };
 
 #endif

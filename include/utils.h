@@ -4,6 +4,7 @@
 #include <vector>
 
 class Utils {
+
 public:
     static bool isAppConfigured();
     static void markAsConfigured();

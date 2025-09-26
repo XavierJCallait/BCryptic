@@ -4,10 +4,6 @@
 
 #include "passwordsw.h"
 
-PasswordsW::PasswordsW(QWidget *parent, std::array<unsigned char, 32> vk) : QWidget(parent) {
-    QLabel *label = new QLabel("Passwords", this);
-    QVBoxLayout *layout = new QVBoxLayout(this);
+PasswordsW::PasswordsW(QWidget *parent, std::array<unsigned char, 32> vk) : QMainWindow(parent) {
     qDebug() << vk.data();
-    layout->addWidget(label);
-    setLayout(layout);
 }
