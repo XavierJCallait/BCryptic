@@ -25,10 +25,11 @@ set(SOURCES
     src/QuestionsPage.cpp
     src/SetMasterPage.cpp
     src/utils.cpp
-    src/passwordsW.cpp
+    src/PasswordsMainWindow.cpp
     src/StartPage.cpp
     src/vault.cpp
     src/StartupMainWindow.cpp
+    src/Secret.cpp
     src/main.cpp
 )
 
@@ -38,10 +39,11 @@ set(HEADERS
     include/QuestionsPage.h
     include/SetMasterPage.h
     include/utils.h
-    include/passwordsW.h
+    include/PasswordsMainWindow.h
     include/StartPage.h
     include/vault.h
     include/StartUpMainWindow.h
+    include/Secret.h
 )
 
 # If you have .ui files, list them here

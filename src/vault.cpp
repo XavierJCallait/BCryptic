@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <QByteArray>
 
+#include "Secret.h"
 #include "utils.h"
 #include "database.h"
 #include "vault.h"
