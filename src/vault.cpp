@@ -1,6 +1,5 @@
 #include <sodium.h>
 #include <stdexcept>
-#include <QDebug>
 #include <QByteArray>
 
 #include "utils.h"
@@ -81,17 +80,17 @@ void Vault::setupVault(const std::string &masterPassword, std::array<unsigned ch
 
 std::array<unsigned char, 32> Vault::getVaultKey(const std::string &masterPassword) {
     if (masterPassword.empty()) {
-        throw std::runtime_error("No master password");
+        throw std::runtime_error("Master password must not be empty");
     }
     std::array<unsigned char, 32> derived_key{};
     if (crypto_pwhash(derived_key.data(), derived_key.size(), masterPassword.c_str(), masterPassword.size(), argonParams.salt.data(), argonParams.opslimit, argonParams.memlimit, argonParams.algorithm) != 0 ) {
-        throw std::runtime_error("Failed to derive decryption key");
+        throw std::runtime_error("Program error, please relaunch app");
     }
     std::vector<unsigned char> associatedData = buildAssociatedData(argonParams.salt, argonParams.opslimit, argonParams.memlimit);
     std::array<unsigned char, 32> vk{};
     unsigned long long mlen = 0;
     if (crypto_aead_xchacha20poly1305_ietf_decrypt(vk.data(), &mlen, nullptr, vaultParams.encrypted_vk.data(), vaultParams.encrypted_vk.size(), associatedData.data(), associatedData.size(), vaultParams.aead_nonce.data(), derived_key.data()) != 0) {
-        throw std::runtime_error("Failed to retrieve vault key");
+        throw std::runtime_error("Wrong password, please try again");
     }
     return vk;
 }
