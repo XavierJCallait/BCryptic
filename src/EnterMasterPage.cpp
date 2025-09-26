@@ -4,7 +4,6 @@
 #include <QVBoxLayout>
 #include <QDebug>
 
-#include "passwordsw.h"
 #include "EnterMasterPage.h"
 #include "vault.h"
 
@@ -46,9 +45,6 @@ EnterMasterPage::EnterMasterPage(QWidget *parent) : QWidget(parent) {
             return;
         }
         
-        PasswordsW *passwords = new PasswordsW(nullptr, cal_vk);
-        passwords->show();
-        this->close();
-
+        emit loginSucceeded();
     });
 }

@@ -8,6 +8,9 @@ class StartPage : public QWidget {
 
 public:
     StartPage(QWidget *parent = nullptr);
+
+signals:
+    void newUserFound();
 };
 
 #endif

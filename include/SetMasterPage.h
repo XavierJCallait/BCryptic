@@ -8,6 +8,9 @@ class SetMasterPage : public QWidget {
 
 public:
     SetMasterPage(QWidget *parent = nullptr);
+
+signals:
+    void masterCreated();
 };
 
 #endif

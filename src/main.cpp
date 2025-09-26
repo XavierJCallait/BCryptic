@@ -5,15 +5,13 @@
 #include <QDebug>
 #include <QSettings>
 
-#include "EnterMasterPage.h"
-#include "StartPage.h"
+#include "PasswordsMainWindow.h"
+#include "StartupMainWindow.h"
 #include "database.h"
 #include "utils.h"
-#include "vault.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
-    QWidget *mainWidget = new QWidget();
 
     try {
         Database::getInstance();
@@ -22,16 +20,13 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    if (!Utils::isAppConfigured()) {
-        mainWidget = new StartPage();
-    } else {
-        mainWidget = new EnterMasterPage();
-    }
-  
-    mainWidget->show();
+    StartupMainWindow *startupMainWindow = new StartupMainWindow();
+    PasswordsMainWindow *passwordMainWindow = new PasswordsMainWindow();
+    QObject::connect(startupMainWindow, &StartupMainWindow::loginSucceeded, passwordMainWindow, &PasswordsMainWindow::show);
+    startupMainWindow->show(); 
 
     // FOR TESTING PURPOSES ONLY
-    // Utils::markAsUnconfigured(); 
+    // Utils::markAsUnconfigured();
 
     return app.exec();
 }

@@ -8,7 +8,6 @@
 #include <string>
 #include <utility>
 
-#include "SetMasterPage.h"
 #include "database.h"
 #include "QuestionsPage.h"
 
@@ -110,9 +109,7 @@ void QuestionsPage::saveQuestionsToDatabase(QLabel *submitLabel) {
     }
     Database& database = Database::getInstance();
     database.storeQuestions(question_answer_list);
-    SetMasterPage *page = new SetMasterPage();
-    page->show();
-    this->close();
+    emit questionsAnswered();
 }
 
 void QuestionsPage::initializeComboBoxes(QFormLayout *form) {

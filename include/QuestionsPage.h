@@ -20,6 +20,9 @@ public:
 
 private slots:
     void updateComboBox(const QString &text, int index);
+
+signals:
+    void questionsAnswered();
     
 private:
     QList<QComboBox *> comboBoxes;

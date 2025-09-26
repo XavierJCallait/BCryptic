@@ -6,7 +6,6 @@
 
 #include "SetMasterPage.h"
 #include "utils.h"
-#include "EnterMasterPage.h"
 #include "vault.h"
 
 SetMasterPage::SetMasterPage(QWidget *parent) : QWidget(parent) {
@@ -40,13 +39,12 @@ SetMasterPage::SetMasterPage(QWidget *parent) : QWidget(parent) {
             return;
         } else {
             Vault *vault = new Vault();
-            std::array<unsigned char, 32> vk{};
+            std::array<unsigned char, 32> vk = {};
             vault->setupVault(passwordInput->text().toStdString(), vk);
+            (void)vk;
             qDebug() << vk.data();
             Utils::markAsConfigured();
-            EnterMasterPage *enterMaster = new EnterMasterPage();
-            enterMaster->show();
-            this->close();
+            emit masterCreated();
         }
     });
 

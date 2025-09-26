@@ -1,10 +1,7 @@
 #include <QLabel>
 #include <QPushButton>
-#include <QLineEdit>
 #include <QVBoxLayout>
 
-#include "SetMasterPage.h"
-#include "QuestionsPage.h"
 #include "StartPage.h"
 
 StartPage::StartPage(QWidget *parent) : QWidget(parent) {
@@ -19,11 +16,7 @@ StartPage::StartPage(QWidget *parent) : QWidget(parent) {
     continueButton->setFixedWidth(200);
 
     connect(continueButton, &QPushButton::clicked, this, [this]() {
-        // QuestionsW *questions = new QuestionsW();
-        // questions->show();
-        SetMasterPage *setMaster = new SetMasterPage();
-        setMaster->show();
-        this->close();
+        emit newUserFound();
     });
 
     QVBoxLayout *layout = new QVBoxLayout(this);

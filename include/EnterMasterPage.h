@@ -8,6 +8,9 @@ class EnterMasterPage : public QWidget {
 
 public:
     EnterMasterPage(QWidget *parent = nullptr);
+
+signals:
+    void loginSucceeded();
 };
 
 #endif
