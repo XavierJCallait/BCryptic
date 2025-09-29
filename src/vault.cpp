@@ -1,6 +1,7 @@
 #include <sodium.h>
 #include <stdexcept>
 #include <QByteArray>
+#include <QDebug>
 
 #include "Secret.h"
 #include "utils.h"
@@ -111,12 +112,13 @@ std::vector<unsigned char> Vault::encryptItem(const std::vector<unsigned char> &
     unsigned long long encrypted_length = plaintext.size() + crypto_aead_xchacha20poly1305_ietf_ABYTES;
     std::vector<unsigned char> ciphertext(encrypted_length);
 
-    crypto_aead_xchacha20poly1305_ietf_encrypt(ciphertext.data(), &encrypted_length,
+    unsigned long long clen = 0;
+    crypto_aead_xchacha20poly1305_ietf_encrypt(ciphertext.data(), &clen,
                                                plaintext.data(), plaintext.size(),
                                                nullptr, 0, nullptr, 
                                                nonce.data(), vaultKey.data());
 
-    ciphertext.resize(encrypted_length);
+    ciphertext.resize(clen);
 
     return ciphertext;
 }

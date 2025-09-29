@@ -11,9 +11,7 @@ class PasswordsMainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    PasswordsMainWindow(QWidget *parent = nullptr);
-
-    void setVault(std::shared_ptr<Vault> vault) { this->vault = vault; }
+    PasswordsMainWindow(std::shared_ptr<Vault> vault, QWidget *parent = nullptr);
 
 signals:
 

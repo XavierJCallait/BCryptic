@@ -22,9 +22,8 @@ int main(int argc, char *argv[]) {
     }
 
     StartupMainWindow *startupMainWindow = new StartupMainWindow();
-    PasswordsMainWindow *passwordMainWindow = new PasswordsMainWindow();
-    QObject::connect(startupMainWindow, &StartupMainWindow::loginSucceeded, [passwordMainWindow](std::shared_ptr<Vault> vault) {
-        passwordMainWindow->setVault(vault);
+    QObject::connect(startupMainWindow, &StartupMainWindow::loginSucceeded, [](std::shared_ptr<Vault> vault) {
+        PasswordsMainWindow *passwordMainWindow = new PasswordsMainWindow(vault);
         passwordMainWindow->show();
     });
     startupMainWindow->show(); 
