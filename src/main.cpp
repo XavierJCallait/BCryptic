@@ -8,6 +8,7 @@
 #include "PasswordsMainWindow.h"
 #include "StartupMainWindow.h"
 #include "database.h"
+#include "vault.h"
 #include "utils.h"
 
 int main(int argc, char *argv[]) {
@@ -22,7 +23,10 @@ int main(int argc, char *argv[]) {
 
     StartupMainWindow *startupMainWindow = new StartupMainWindow();
     PasswordsMainWindow *passwordMainWindow = new PasswordsMainWindow();
-    QObject::connect(startupMainWindow, &StartupMainWindow::loginSucceeded, passwordMainWindow, &PasswordsMainWindow::show);
+    QObject::connect(startupMainWindow, &StartupMainWindow::loginSucceeded, [passwordMainWindow](std::shared_ptr<Vault> vault) {
+        passwordMainWindow->setVault(vault);
+        passwordMainWindow->show();
+    });
     startupMainWindow->show(); 
 
     // FOR TESTING PURPOSES ONLY
