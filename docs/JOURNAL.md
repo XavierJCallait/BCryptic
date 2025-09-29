@@ -24,6 +24,9 @@ The bug was using the wrong constants for encrypt/decryption. I swear I'm smart!
 ### Entry 26/09/2025
 Today we are refactoring the flow between pages to make it more organized and leverage Qt's offerings. It's a good day, so far...
 
+### Entry 28/09/2025
+Working on the encryption/decryption of items in the database based on the vaultKey. Pretty straight forward, reusing the same encryption/decryption as the vaultKey. Need to add more database operations, which is easy, but annoying at times. Thinking about using an ORM, but given the limited number of fields in each object, might not be worth it...
+
 ## Challenges
 
 ### Environment Setup
