@@ -30,6 +30,7 @@ set(SOURCES
     src/vault.cpp
     src/StartupMainWindow.cpp
     src/Secret.cpp
+    src/BuildPasswords.cpp
     src/main.cpp
 )
 
@@ -44,6 +45,7 @@ set(HEADERS
     include/vault.h
     include/StartUpMainWindow.h
     include/Secret.h
+    include/BuildPasswords.h
 )
 
 # If you have .ui files, list them here
