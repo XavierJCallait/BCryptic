@@ -6,6 +6,7 @@
 
 #include "SetMasterPage.h"
 #include "utils.h"
+#include "Secret.h"
 #include "vault.h"
 
 SetMasterPage::SetMasterPage(QWidget *parent) : QWidget(parent) {
@@ -34,18 +35,26 @@ SetMasterPage::SetMasterPage(QWidget *parent) : QWidget(parent) {
         if (passwordInput->text().isEmpty() || passwordConfirmation->text().isEmpty()) {
             submitLabel->setText("Please fill in both fields before submitting");
             return;
-        } else if (passwordInput->text() != passwordConfirmation->text()) {
+        } 
+        if (passwordInput->text() != passwordConfirmation->text()) {
             submitLabel->setText("Passwords do not match, ensure both fields are the same before submitting");
             return;
-        } else {
-            Vault *vault = new Vault();
-            std::array<unsigned char, 32> vk = {};
-            vault->setupVault(passwordInput->text().toStdString(), vk);
-            (void)vk;
-            qDebug() << vk.data();
-            Utils::markAsConfigured();
-            emit masterCreated();
         }
+        Secret password(passwordInput->text());
+        passwordInput->text().fill(QChar(0));
+        passwordInput->text().clear();
+        passwordConfirmation->text().fill(QChar(0));
+        passwordConfirmation->text().clear();
+        try {
+            Vault *vault = new Vault();
+            vault->setupVault(password);
+        } catch (const std::runtime_error &e) {
+            submitLabel->setText(e.what());
+            return;
+        }
+        
+        Utils::markAsConfigured();
+        emit masterCreated();
     });
 
     QVBoxLayout *layout = new QVBoxLayout(this);

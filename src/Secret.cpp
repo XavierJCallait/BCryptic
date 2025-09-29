@@ -10,6 +10,18 @@ Secret::Secret(size_t n) : pointer(nullptr), data_length(n) {
     }
 }
 
+Secret::Secret(const QString &input) {
+    QByteArray utf8Input = input.toUtf8();
+    size_t alloc_size = utf8Input.size();
+    pointer = static_cast<unsigned char *> (sodium_malloc(alloc_size));
+    if (!pointer) {
+        throw std::bad_alloc();
+    }
+    memcpy(pointer, utf8Input.data(), alloc_size);
+    data_length = alloc_size;
+    sodium_memzero(utf8Input.data(), alloc_size);
+}
+
 Secret::~Secret() {
     secure_free();
 }

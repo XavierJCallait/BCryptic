@@ -36,8 +36,8 @@ StartupMainWindow::StartupMainWindow(QWidget *parent) : QMainWindow(parent) {
         stack->setCurrentIndex(Indices::EnterMaster);
     });
 
-    connect(enterMaster, &EnterMasterPage::loginSucceeded, [this]() {
-        emit loginSucceeded();
+    connect(enterMaster, &EnterMasterPage::loginSucceeded, this, [this](std::shared_ptr<Vault> vault) {
+        emit loginSucceeded(vault);
         this->close();
     });
 }

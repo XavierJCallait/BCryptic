@@ -1,10 +1,13 @@
 #ifndef SECRET_H
 #define SECRET_H
 
+#include <QString>
+
 class Secret {
 
 public:
     explicit Secret(size_t n);
+    Secret(const QString &input);
 
     ~Secret();
 
@@ -16,6 +19,7 @@ public:
 
     unsigned char *data() { return pointer; }
     const unsigned char *data() const { return pointer; }
+    const char *asChar() const { return reinterpret_cast<const char*>(pointer); }
     size_t size() const { return data_length; }
 
 private:

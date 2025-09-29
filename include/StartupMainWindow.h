@@ -5,6 +5,8 @@
 #include <QWidget>
 #include <QStackedWidget>
 
+#include "vault.h"
+
 enum Indices : int {
     Start = 0,
     SetMaster = 1,
@@ -19,7 +21,7 @@ public:
     StartupMainWindow(QWidget *parent = nullptr);
 
 signals:
-    void loginSucceeded();
+    void loginSucceeded(std::shared_ptr<Vault> vault);
 
 private:
     QStackedWidget *stack;
