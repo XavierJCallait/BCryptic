@@ -6,6 +6,8 @@
 #include <vector> 
 #include <array>
 
+#include "Secret.h"
+
 struct ArgonParams {
     std::vector<unsigned char> salt;
     unsigned long long opslimit;
@@ -22,14 +24,19 @@ class Vault {
 
 public:
     Vault();
-    void setupVault(const std::string &masterPassword, std::array<unsigned char, 32> &vk);
-    std::array<unsigned char, 32> getVaultKey(const std::string &masterPassword);
+    void setupVault(const Secret &masterPassword);
+    void checkVaultKey(const Secret &masterPassword);
+    std::vector<unsigned char> encryptItem(const std::vector<unsigned char> &plaintext, const std::vector<unsigned char> &nonce);
+    std::vector<unsigned char> decryptItem(const std::vector<unsigned char> &ciphertext, const std::vector<unsigned char> &nonce);
+    std::string hashItem(const std::string &item);
+    void verifyHash(const std::string &storedHash, const std::string &item);
 
 private:
     void fetchArgonParams();
     std::vector<unsigned char> buildAssociatedData(const std::vector<unsigned char> &salt, unsigned long long opslimit, size_t memlimit);
     ArgonParams argonParams;
     VaultParams vaultParams;
+    Secret vaultKey;
 };
 
 #endif
