@@ -1,7 +1,9 @@
 #include <sodium.h>
 #include <stdexcept>
-#include <QByteArray>
 #include <QDebug>
+#include <QFile>
+#include <QSettings>
+#include <QString>
 
 #include "Secret.h"
 #include "utils.h"
@@ -159,3 +161,38 @@ void Vault::verifyHash(const std::string &storedHash, const std::string &item) {
         throw std::runtime_error("Item does not match hash");
     }
 }
+
+QByteArray Vault::computeDatabaseMAC(const std::string &databaseName) {
+    QFile file(QString::fromStdString(databaseName));
+    if (!file.open(QIODevice::ReadOnly)) {
+        throw std::runtime_error("Failed to open DB file");
+    }
+
+    crypto_generichash_state state;
+    crypto_generichash_init(&state, vaultKey.data(), vaultKey.size(), crypto_generichash_BYTES);
+
+    while (!file.atEnd()) {
+        QByteArray chunk = file.read(8192);
+        crypto_generichash_update(&state, reinterpret_cast<const unsigned char *>(chunk.constData()), chunk.size());
+    }
+
+    QByteArray mac(crypto_generichash_BYTES, Qt::Uninitialized);
+    crypto_generichash_final(&state, reinterpret_cast<unsigned char *>(mac.data()), mac.size());
+    return mac;
+}
+
+void Vault::saveDatabaseMAC(const std::string &databaseName) {
+    QByteArray currentMAC = computeDatabaseMAC(databaseName);
+    QSettings settings("BCryptic", "BCrypticApp");
+    settings.setValue("databaseMAC", currentMAC.toHex());
+}
+
+void Vault::verifyDatabaseMAC(const std::string &databaseName) {
+    QByteArray currentMAC = computeDatabaseMAC(databaseName);
+    QSettings settings("BCryptic", "BCrypticApp");
+    QByteArray previousMAC = QByteArray::fromHex(settings.value("databaseMAC").toByteArray());
+
+    if (currentMAC.size() != previousMAC.size() || sodium_memcmp(currentMAC.constData(), previousMAC.constData(), currentMAC.size()) != 0) {
+        throw std::runtime_error("Database file has been edited between runs");
+    }
+};

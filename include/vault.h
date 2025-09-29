@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector> 
 #include <array>
+#include <QByteArray>
 
 #include "Secret.h"
 
@@ -30,9 +31,12 @@ public:
     std::vector<unsigned char> decryptItem(const std::vector<unsigned char> &ciphertext, const std::vector<unsigned char> &nonce);
     std::string hashItem(const std::string &item);
     void verifyHash(const std::string &storedHash, const std::string &item);
+    void verifyDatabaseMAC(const std::string &databaseName);
+    void saveDatabaseMAC(const std::string &databaseName);
 
 private:
     void fetchArgonParams();
+    QByteArray computeDatabaseMAC(const std::string &databaseName);
     std::vector<unsigned char> buildAssociatedData(const std::vector<unsigned char> &salt, unsigned long long opslimit, size_t memlimit);
     ArgonParams argonParams;
     VaultParams vaultParams;
