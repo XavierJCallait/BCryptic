@@ -30,6 +30,9 @@ Working on the encryption/decryption of items in the database based on the vault
 ### Entry 29/09/2025
 Fixed a segfault which is always a good thing, just a question of accessing a method from a nullptr. Created logic to hash the database file and check for modifications between runs. Nice feature to have, yet pretty easy to implement. Starting on the build password logic, this might be a bit more complicated...
 
+### Entry 30/09/2025
+Built the salt choosing logic. A lot of math involved, but who would have thought that coding would require math skills?
+
 ## Challenges
 
 ### Environment Setup
