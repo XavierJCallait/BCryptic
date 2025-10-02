@@ -33,6 +33,9 @@ Fixed a segfault which is always a good thing, just a question of accessing a me
 ### Entry 30/09/2025
 Built the salt choosing logic. A lot of math involved, but who would have thought that coding would require math skills?
 
+### Entry 01/10/2025
+Adding tests to repo to ensure logic repeatedly does what I want it to do. Using Google Tests as it contains mocking, offers many different macros, and has all of the features I need pretty much built in. It was easy to include it in the CMakeLists file, so really can't complain. I do have a lot of other things to complain about...
+
 ## Challenges
 
 ### Environment Setup
