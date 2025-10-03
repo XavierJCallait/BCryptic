@@ -20,7 +20,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-# ---
 add_library(bcryptic_lib
     src/BuildPasswords.cpp
     src/Secret.cpp
@@ -74,6 +73,7 @@ find_library(GTEST_MAIN_LIB gtest_main REQUIRED)
 add_executable(runTests
     tests/test_vault.cpp
     tests/test_utils.cpp
+    tests/test_BuildPasswords.cpp
 )
 
 target_link_libraries(runTests
@@ -88,103 +88,3 @@ target_include_directories(runTests PRIVATE
 )
 
 add_test(NAME BCrypticTests COMMAND runTests)
-# ---
-
-
-# set(SOURCES
-#     src/EnterMasterPage.cpp
-#     src/database.cpp
-#     src/QuestionsPage.cpp
-#     src/SetMasterPage.cpp
-#     src/utils.cpp
-#     src/PasswordsMainWindow.cpp
-#     src/StartPage.cpp
-#     src/vault.cpp
-#     src/StartupMainWindow.cpp
-#     src/Secret.cpp
-#     src/BuildPasswords.cpp
-#     src/main.cpp
-# )
-
-# set(HEADERS
-#     include/EnterMasterPage.h
-#     include/database.h
-#     include/QuestionsPage.h
-#     include/SetMasterPage.h
-#     include/utils.h
-#     include/PasswordsMainWindow.h
-#     include/StartPage.h
-#     include/vault.h
-#     include/StartUpMainWindow.h
-#     include/Secret.h
-#     include/BuildPasswords.h
-# )
-
-# # If you have .ui files, list them here
-# # set(UI 
-# #     inc/mywindow.ui
-# # )
-
-# # If you have resource files, list them here
-# # set(RESOURCES
-# #     resources.qrc
-# # )
-
-# add_executable(${PROJECT_NAME} 
-#     ${SOURCES} 
-#     ${HEADERS}
-#     # ${UI}
-#     # ${RESOURCES}
-# )
-
-# # Link Qt libraries
-# target_link_libraries(${PROJECT_NAME} 
-#     Qt6::Core
-#     Qt6::Widgets
-#     SQLite::SQLite3
-#     ${SODIUM_LIBRARIES}
-# )
-
-# # Set target properties
-# set_target_properties(${PROJECT_NAME} PROPERTIES
-#     # WIN32_EXECUTABLE TRUE 
-#     WIN32_EXECUTABLE FALSE
-#     MACOSX_BUNDLE TRUE
-# )
-
-# target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror)
-
-# target_include_directories(${PROJECT_NAME} PRIVATE
-#     ${CMAKE_CURRENT_SOURCE_DIR}/src
-#     ${CMAKE_CURRENT_SOURCE_DIR}/include
-# )
-
-# message(STATUS "Built using C++ standard ${CMAKE_CXX_STANDARD}")
-
-# find_library(GTEST_LIB gtest REQUIRED)
-# find_library(GTEST_MAIN_LIB gtest_main REQUIRED)
-
-# # Add your test sources
-# set(TEST_SOURCES
-#     tests/test_BuildPasswords.cpp
-#     # tests/.cpp
-# )
-
-# add_executable(runTests ${TEST_SOURCES})
-
-# target_link_libraries(runTests
-#     PRIVATE
-#     ${GTEST_LIB}
-#     ${GTEST_MAIN_LIB}
-#     SQLite::SQLite3
-#     ${SODIUM_LIBRARIES}
-#     Qt6::Core
-#     Qt6::Widgets
-# )
-
-# target_include_directories(runTests PRIVATE
-#     ${CMAKE_CURRENT_SOURCE_DIR}/include
-#     ${CMAKE_CURRENT_SOURCE_DIR}/src
-# )
-
-# add_test(NAME BCrypticTests COMMAND runTests)
