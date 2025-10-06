@@ -36,10 +36,39 @@ PasswordsMainWindow::PasswordsMainWindow(std::shared_ptr<Vault> vault, QWidget *
     setMenuBar(menuBar);
 
     QMenu *fileMenu = menuBar->addMenu("File");
-    QAction *newDatabase = new QAction(QIcon(":/icons/Database.svg"), "New Database", this);
+    QAction *newDatabase = new QAction(QIcon(":/icons/NewDatabase.svg"), "New Database", this);
+    newDatabase->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
+    QAction *editDatabase = new QAction("Edit Database", this);
+    QAction *deleteDatabase = new QAction("Delete Database", this);
     fileMenu->addAction(newDatabase);
+    fileMenu->addAction(editDatabase);
+    fileMenu->addAction(deleteDatabase);
+
     QMenu *categoriesMenu = menuBar->addMenu("Categories");
+    QAction *newCategory = new QAction("New Category");
+    QAction *editCategory = new QAction("Edit Category");
+    QAction *deleteCategory = new QAction("Delete Category");
+    categoriesMenu->addAction(newCategory);
+    categoriesMenu->addAction(editCategory);
+    categoriesMenu->addAction(deleteCategory);
+    
     QMenu *entryMenu = menuBar->addMenu("Entry");
+    QAction *newEntry = new QAction("New Entry");
+    QAction *editEntry = new QAction("Edit Entry");
+    QAction *deleteEntry = new QAction("Delete Entry");
+    entryMenu->addAction(newEntry);
+    entryMenu->addAction(editEntry);
+    entryMenu->addAction(deleteEntry);
+
+    QMenu *findMenu = menuBar->addMenu("Find");
+    QAction *findFile = new QAction("Find File");
+    QAction *findCategory = new QAction("Find Category");
+    QAction *findEntry = new QAction("Find Entry");
+    findMenu->addAction(findFile);
+    findMenu->addAction(findCategory);
+    findMenu->addAction(findEntry);
+
+    QAction *helpButton = menuBar->addAction("Help");
 
     QToolBar *toolBar = new QToolBar(this);
     toolBar->setMovable(false);
@@ -58,7 +87,7 @@ PasswordsMainWindow::PasswordsMainWindow(std::shared_ptr<Vault> vault, QWidget *
 
     QSplitter *splitter1 = new QSplitter(this);
     QTreeWidget *groupTree1 = new QTreeWidget(splitter1);
-    groupTree1->setHeaderLabel("Groups");
+    groupTree1->setHeaderLabel("Categories");
     QTableWidget *table1 = new QTableWidget(splitter1);
     table1->setColumnCount(4);
     table1->setHorizontalHeaderLabels({"Title", "Password", "URL", "Notes"});
@@ -78,7 +107,7 @@ PasswordsMainWindow::PasswordsMainWindow(std::shared_ptr<Vault> vault, QWidget *
 
     QSplitter *splitter3 = new QSplitter(this);
     QTreeWidget *groupTree3 = new QTreeWidget(splitter3);
-    groupTree3->setHeaderLabel("Groups");
+    groupTree3->setHeaderLabel("Sets");
     QTableWidget *table3 = new QTableWidget(splitter3);
     table3->setColumnCount(4);
     table3->setHorizontalHeaderLabels({"Title", "Password", "URL", "Notes"});
