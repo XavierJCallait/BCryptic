@@ -55,6 +55,8 @@ add_executable(BCryptic
     include/SetMasterPage.h
     include/StartPage.h
     include/StartupMainWindow.h
+
+    resources.qrc
 )
 
 target_link_libraries(BCryptic
