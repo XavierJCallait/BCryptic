@@ -36,6 +36,9 @@ Built the salt choosing logic. A lot of math involved, but who would have though
 ### Entry 01/10/2025
 Adding tests to repo to ensure logic repeatedly does what I want it to do. Using Google Tests as it contains mocking, offers many different macros, and has all of the features I need pretty much built in. It was easy to include it in the CMakeLists file, so really can't complain. I do have a lot of other things to complain about...
 
+### Entry 08/10/2025
+It's been a few days since my last entry, but I had to take a few days to recover after touching grass. My main focus now is working on the actual UI for the page with all of the passwords. Got inspiration from Keepass, but the issue is making the code simple and not have 20000 things in one class. Thankfully C++ is OOP-based so that should simplify things... 
+
 ## Challenges
 
 ### Environment Setup
