@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QWidget>
+#include <QTabWidget>
 #include <array>
 
 #include "vault.h"
@@ -17,6 +18,8 @@ signals:
 
 private:
     std::shared_ptr<Vault> vault;
+    QTabWidget *tabWidget;
+    void openNewDatabaseDialog();
 };
 
 #endif
