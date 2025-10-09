@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/NewDatabase.svg</file>
+        <file>resources/icons/NewDatabase.svg</file>
+        <file>resources/style.qss</file>
     </qresource>
 </RCC>

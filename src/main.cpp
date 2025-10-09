@@ -4,6 +4,8 @@
 #include <QVBoxLayout>
 #include <QDebug>
 #include <QSettings>
+#include <QTextStream>
+#include <QFile>
 
 #include "PasswordsMainWindow.h"
 #include "StartupMainWindow.h"
@@ -13,6 +15,14 @@
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
+
+    QFile styleFile(":/resources/style.qss");
+    if (styleFile.open(QFile::ReadOnly | QFile::Text)) {
+        QTextStream textStream(&styleFile);
+        app.setStyleSheet(textStream.readAll());
+    } else {
+        qWarning() << "Failed to load QSS file: " << styleFile.errorString();
+    }
 
     try {
         Database::getInstance();
