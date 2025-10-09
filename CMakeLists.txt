@@ -1,12 +1,10 @@
 cmake_minimum_required(VERSION 3.31.2)
 project(BCryptic VERSION 0.1.0 LANGUAGES CXX DESCRIPTION "A simple C++ password manager application")
 
-# Set C++20 Standard
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Import packages
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
 find_package(SQLite3 REQUIRED)
 
@@ -15,7 +13,6 @@ pkg_check_modules(SODIUM REQUIRED libsodium)
 
 enable_testing()
 
-# Handle Qt MOC, UIC, and RCC automatically
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
@@ -69,7 +66,7 @@ target_link_libraries(BCryptic
 )
 
 set_target_properties(BCryptic PROPERTIES
-    WIN32_EXECUTABLE FALSE
+    WIN32_EXECUTABLE FALSE # Set to true to remove logging
     MACOSX_BUNDLE TRUE
 )
 
