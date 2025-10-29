@@ -58,6 +58,40 @@ bool Database::storeQuestions(const std::list<std::pair<std::string, std::string
     return true;
 }
 
+bool Database::fetchQuestions(const std::array<int, 3> &indices, std::array<std::string, 3> &questions) {
+    if (!database) {
+        return false;
+    }
+
+    const char *select_questions = "SELECT answer FROM " QUESTIONS_ANSWERS_TABLE " WHERE id IN (?, ?, ?);";
+    sqlite3_stmt *stmt;
+    if (sqlite3_prepare_v2(database.get(), select_questions, -1, &stmt, nullptr) != SQLITE_OK) {
+        qCritical() << "Error preparing statement: " << sqlite3_errmsg(database.get());
+        return false;
+    }
+
+    for (int i = 0; i < 3; ++i) {
+        if (sqlite3_bind_int(stmt, i + 1, indices[i]) != SQLITE_OK) {
+            qWarning() << "Failed to bind parameter" << i + 1 << ":" << sqlite3_errmsg(database.get());
+            sqlite3_finalize(stmt);
+            return false;
+        }
+    }
+
+    // Execute and fetch
+    int index = 0;
+    while (sqlite3_step(stmt) == SQLITE_ROW && index < 3) {
+        const unsigned char *answer = sqlite3_column_text(stmt, 0);
+        if (answer) {
+            questions[index] = reinterpret_cast<const char *>(answer);
+        }
+        index++;
+    }
+
+    sqlite3_finalize(stmt);
+    return true;
+}
+
 bool Database::storeVault(ArgonParams &argonParams, VaultParams &vaultParams) {
     if (!database) {
         return false;
