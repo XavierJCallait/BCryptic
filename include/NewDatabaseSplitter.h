@@ -2,6 +2,8 @@
 #define NEWDATABASESPLITTER_H
 
 #include <QWidget>
+#include <QTreeWidget>
+#include <QTableWidget>
 #include <QSplitter>
 
 class NewDatabaseSplitter : public QSplitter {
@@ -10,7 +12,12 @@ class NewDatabaseSplitter : public QSplitter {
 public:
     NewDatabaseSplitter(QWidget *parent = nullptr);
 
+    QTreeWidget *getGroupTree() const { return groupTree; }
+    QTableWidget *getTable() const { return table; }
+
 private:
+    QTreeWidget *groupTree;
+    QTableWidget *table;
 };
 
 #endif
