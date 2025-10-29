@@ -21,8 +21,11 @@
 #include <QTreeWidget>
 #include <QStatusBar>
 #include <QTableWidget>
+#include <QTreeWidgetItem>
 
 #include "NewItemDialog.h"
+#include "database.h"
+#include "NewPasswordDialog.h"
 #include "NewDatabaseSplitter.h"
 #include "PasswordsMainWindow.h"
 
@@ -43,29 +46,73 @@ PasswordsMainWindow::PasswordsMainWindow(std::shared_ptr<Vault> vault, QWidget *
     setMenuBar(menuBar);
 
     QMenu *fileMenu = menuBar->addMenu("File");
-    QAction *newDatabase = new QAction(QIcon(":/icons/NewDatabase.svg"), "New Database", this);
+
+    QAction *newDatabase = new QAction(QIcon(":/resources/icons/NewDatabase.svg"), "New Database", this);
     newDatabase->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
     connect(newDatabase, &QAction::triggered, this, [this]() {
         openNewDatabaseDialog();
-    }); 
+    });
+
     QAction *editDatabase = new QAction("Edit Database", this);
+    editDatabase->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_E));
+    connect(editDatabase, &QAction::triggered, this, [this]() {
+        openEditDatabaseDialog();
+    });
+
     QAction *deleteDatabase = new QAction("Delete Database", this);
+    deleteDatabase->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_D));
+    connect(deleteDatabase, &QAction::triggered, this, [this]() {   
+        deleteCurrentDatabase();
+    });
+
     fileMenu->addAction(newDatabase);
     fileMenu->addAction(editDatabase);
     fileMenu->addAction(deleteDatabase);
 
     QMenu *categoriesMenu = menuBar->addMenu("Categories");
-    QAction *newCategory = new QAction("New Category");
-    QAction *editCategory = new QAction("Edit Category");
-    QAction *deleteCategory = new QAction("Delete Category");
+
+    QAction *newCategory = new QAction("New Category", this);
+    newCategory->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_G));
+    connect(newCategory, &QAction::triggered, this, [this]() {
+        openNewCategoryDialog();
+    });
+
+    QAction *editCategory = new QAction("Edit Category", this);
+    editCategory->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_H));
+    connect(editCategory, &QAction::triggered, this, [this]() {
+        openEditCategoryDialog();
+    });
+
+    QAction *deleteCategory = new QAction("Delete Category", this);
+    deleteCategory->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_J));
+    connect(deleteCategory, &QAction::triggered, this, [this]() {
+        deleteCurrentCategory();
+    });
+
     categoriesMenu->addAction(newCategory);
     categoriesMenu->addAction(editCategory);
     categoriesMenu->addAction(deleteCategory);
     
     QMenu *entryMenu = menuBar->addMenu("Entry");
-    QAction *newEntry = new QAction("New Entry");
-    QAction *editEntry = new QAction("Edit Entry");
-    QAction *deleteEntry = new QAction("Delete Entry");
+
+    QAction *newEntry = new QAction("New Entry", this);
+    newEntry->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_K));
+    connect(newEntry, &QAction::triggered, this, [this]() {
+        openNewPasswordDialog();
+    });
+
+    QAction *editEntry = new QAction("Edit Entry", this);
+    editEntry->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_L));
+    connect(editEntry, &QAction::triggered, this, [this]() {
+        openEditPasswordDialog();
+    });
+
+    QAction *deleteEntry = new QAction("Delete Entry", this);
+    deleteEntry->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_M));
+    connect(deleteEntry, &QAction::triggered, this, [this]() {
+        deleteCurrentPassword();
+    });
+    
     entryMenu->addAction(newEntry);
     entryMenu->addAction(editEntry);
     entryMenu->addAction(deleteEntry);
@@ -80,62 +127,82 @@ PasswordsMainWindow::PasswordsMainWindow(std::shared_ptr<Vault> vault, QWidget *
 
     QAction *helpButton = menuBar->addAction("Help");
 
-    QToolBar *toolBar = new QToolBar(this);
-    toolBar->setMovable(false);
-    toolBar->setFloatable(false);
-    toolBar->setContextMenuPolicy(Qt::PreventContextMenu);
-    toolBar->toggleViewAction()->setEnabled(false);
-    addToolBar(Qt::TopToolBarArea, toolBar);
-    toolBar->addAction("Lock");
-    toolBar->addAction("New");
-    toolBar->addAction("Edit");
-    toolBar->addAction("Delete");
-    toolBar->addAction("Share");
+    fetchDatabase();
 
     tabWidget = new QTabWidget(this);
     setCentralWidget(tabWidget);
+}
 
-    // QSplitter *splitter1 = new QSplitter(this);
-    // QTreeWidget *groupTree1 = new QTreeWidget(splitter1);
-    // groupTree1->setHeaderLabel("Categories");
-    // QTableWidget *table1 = new QTableWidget(splitter1);
-    // table1->setColumnCount(4);
-    // table1->setHorizontalHeaderLabels({"Title", "Password", "URL", "Notes"});
-    // splitter1->addWidget(groupTree1);
-    // splitter1->addWidget(table1);
-    // splitter1->setStretchFactor(1, 2);
-
-    // QSplitter *splitter2 = new QSplitter(this);
-    // QTreeWidget *groupTree2 = new QTreeWidget(splitter2);
-    // groupTree2->setHeaderLabel("Groups");
-    // QTableWidget *table2 = new QTableWidget(splitter2);
-    // table2->setColumnCount(4);
-    // table2->setHorizontalHeaderLabels({"Title", "Password", "URL", "Notes"});
-    // splitter2->addWidget(groupTree2);
-    // splitter2->addWidget(table2);
-    // splitter2->setStretchFactor(1, 2);
-
-    // QSplitter *splitter3 = new QSplitter(this);
-    // QTreeWidget *groupTree3 = new QTreeWidget(splitter3);
-    // groupTree3->setHeaderLabel("Sets");
-    // QTableWidget *table3 = new QTableWidget(splitter3);
-    // table3->setColumnCount(4);
-    // table3->setHorizontalHeaderLabels({"Title", "Password", "URL", "Notes"});
-    // splitter3->addWidget(groupTree3);
-    // splitter3->addWidget(table3);
-    // splitter3->setStretchFactor(1, 2);
-
-    // tabWidget->addTab(splitter1, "Database File 1");
-    // tabWidget->addTab(splitter2, "Database File 2");
-    // tabWidget->addTab(splitter3, "Database File 3");
+void PasswordsMainWindow::fetchDatabase() {
+    Database& database = Database::getInstance();
+    std::array<std::string, 3> questions; 
+    if (!database.fetchQuestions({6, 9, 10}, questions)) {
+        return;
+    }
 }
 
 void PasswordsMainWindow::openNewDatabaseDialog() {
     NewItemDialog newDatabaseDialog = NewItemDialog("database", this);
     if (newDatabaseDialog.exec() == QDialog::Accepted) {
         QString newDatabaseName = newDatabaseDialog.getItem();
-        qDebug() << newDatabaseName;
         NewDatabaseSplitter *splitter = new NewDatabaseSplitter();
         tabWidget->addTab(splitter, newDatabaseName);
     }
+}
+
+void PasswordsMainWindow::openNewCategoryDialog() {
+    NewItemDialog newCategoryDialog = NewItemDialog("category", this);
+    if (newCategoryDialog.exec() == QDialog::Accepted) {
+        QString newCategoryName = newCategoryDialog.getItem();
+        NewDatabaseSplitter *currentSplitter = qobject_cast<NewDatabaseSplitter *>(tabWidget->currentWidget());
+        if (!currentSplitter) {
+            return;
+        }
+        databaseTitles[currentSplitter] = QSet<QString>();
+        QTreeWidget *groupTree = currentSplitter->getGroupTree();
+        QTreeWidgetItem *group = new QTreeWidgetItem(groupTree);
+        group->setText(0, newCategoryName);
+    }
+}
+
+void PasswordsMainWindow::openNewPasswordDialog() {
+    NewDatabaseSplitter *currentSplitter = qobject_cast<NewDatabaseSplitter *>(tabWidget->currentWidget());
+    if (!currentSplitter) {
+        return;
+    }
+    NewPasswordDialog newPasswordDialog = NewPasswordDialog(databaseTitles[currentSplitter], this);
+    if (newPasswordDialog.exec() == QDialog::Accepted) {
+        QTableWidget *table = currentSplitter->getTable();
+        table->insertRow(TOP_ROW);
+        QString title = newPasswordDialog.getTitle();
+        databaseTitles[currentSplitter].insert(title);
+        table->setItem(TOP_ROW, 0, new QTableWidgetItem(title));
+        table->setItem(TOP_ROW, 1, new QTableWidgetItem(newPasswordDialog.getPassword()));
+        table->setItem(TOP_ROW, 2, new QTableWidgetItem(newPasswordDialog.getURL()));
+        table->setItem(TOP_ROW, 3, new QTableWidgetItem(newPasswordDialog.getNotes()));
+    }
+}
+
+void PasswordsMainWindow::openEditDatabaseDialog() {
+
+}
+
+void PasswordsMainWindow::deleteCurrentDatabase() {
+
+}
+
+void PasswordsMainWindow::openEditCategoryDialog() {
+
+}
+
+void PasswordsMainWindow::deleteCurrentCategory() {
+
+}
+
+void PasswordsMainWindow::openEditPasswordDialog() {
+
+}
+
+void PasswordsMainWindow::deleteCurrentPassword() {
+
 }

@@ -4,6 +4,7 @@
 #include <string>
 #include <list>
 #include <sqlite3.h>
+#include <array>
 
 #include "vault.h"
 
@@ -27,6 +28,7 @@ public:
 
     void createTables();
     bool storeQuestions(const std::list<std::pair<std::string, std::string>>& iter);
+    bool fetchQuestions(const std::array<int, 3> &indices, std::array<std::string, 3> &questions);
     bool storeVault(ArgonParams &argonParams, VaultParams &vaultParams);
     bool fetchVault(ArgonParams &argonParams, VaultParams &vaultParams);
 
