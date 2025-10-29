@@ -127,9 +127,17 @@ PasswordsMainWindow::PasswordsMainWindow(std::shared_ptr<Vault> vault, QWidget *
 
     QAction *helpButton = menuBar->addAction("Help");
 
-    fetchDatabase();
-
+    Database& database = Database::getInstance();
+    std::vector<std::string> tableNames;
+    database.getTableNames(tableNames);
+    
     tabWidget = new QTabWidget(this);
+
+    for (std::string table : tableNames) {
+        NewDatabaseSplitter *splitter = new NewDatabaseSplitter();
+        tabWidget->addTab(splitter, QString::fromUtf8(table));
+    }
+
     setCentralWidget(tabWidget);
 }
 
@@ -139,6 +147,7 @@ void PasswordsMainWindow::fetchDatabase() {
     if (!database.fetchQuestions({6, 9, 10}, questions)) {
         return;
     }
+    database.countTables();
 }
 
 void PasswordsMainWindow::openNewDatabaseDialog() {
@@ -146,6 +155,13 @@ void PasswordsMainWindow::openNewDatabaseDialog() {
     if (newDatabaseDialog.exec() == QDialog::Accepted) {
         QString newDatabaseName = newDatabaseDialog.getItem();
         NewDatabaseSplitter *splitter = new NewDatabaseSplitter();
+        Database& database = Database::getInstance();
+        if (database.doesTableExists(newDatabaseName.toStdString())) {
+            return;
+        }
+        if (!database.createDatabaseTable(newDatabaseName.toStdString())) {
+            return;
+        }
         tabWidget->addTab(splitter, newDatabaseName);
     }
 }

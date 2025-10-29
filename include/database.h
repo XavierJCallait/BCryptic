@@ -9,7 +9,6 @@
 #include "vault.h"
 
 #define QUESTIONS_ANSWERS_TABLE "questions_answers"
-#define SALTS_TABLE "salts"
 #define VAULT_TABLE "vault"
 #define DATABASE_NAME "mydb.sqlite"
 
@@ -27,10 +26,14 @@ public:
     Database& operator=(Database&&) = delete;
 
     void createTables();
+    int countTables();
     bool storeQuestions(const std::list<std::pair<std::string, std::string>>& iter);
     bool fetchQuestions(const std::array<int, 3> &indices, std::array<std::string, 3> &questions);
     bool storeVault(ArgonParams &argonParams, VaultParams &vaultParams);
     bool fetchVault(ArgonParams &argonParams, VaultParams &vaultParams);
+    bool doesTableExists(const std::string &tableName);
+    bool createDatabaseTable(const std::string &tableName);
+    bool getTableNames(std::vector<std::string> &tableNames);
 
 private:
     Database();

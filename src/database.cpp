@@ -22,16 +22,28 @@ void Database::createTables() {
         qCritical() << "Error creating question_answers table: " << sqlite3_errmsg(database.get());
         throw std::runtime_error("Failed to create questions_answers table");
     }
-    const char *create_salts_table = "CREATE TABLE IF NOT EXISTS " SALTS_TABLE " (id INTEGER PRIMARY KEY AUTOINCREMENT, usage TEXT NOT NULL, salt TEXT NOT NULL, esalt1 TEXT NOT NULL, esalt2 TEXT NOT NULL, esalt3 TEXT NOT NULL);";
-    if (sqlite3_exec(database.get(), create_salts_table, nullptr, nullptr, nullptr) != SQLITE_OK) {
-        qCritical() << "Error creating salts table: " << sqlite3_errmsg(database.get());
-        throw std::runtime_error("Failed to create salts table");
-    }
     const char *create_vault_table = "CREATE TABLE IF NOT EXISTS " VAULT_TABLE " (id INTEGER PRIMARY KEY AUTOINCREMENT, algorithm INTEGER NOT NULL, opslimit INTEGER NOT NULL, memlimit INTEGER NOT NULL, salt BLOB NOT NULL, nonce BLOB NOT NULL, encrypted_vk BLOB NOT NULL);";
     if (sqlite3_exec(database.get(), create_vault_table, nullptr, nullptr, nullptr) != SQLITE_OK) {
         qCritical() << "Error creating vault table: " << sqlite3_errmsg(database.get());
         throw std::runtime_error("Failed to create vault table");
     }
+}
+
+int Database::countTables() {
+    const char *count_tables = "SELECT COUNT(*) FROM sqlite_master WHERE type = 'table';"; //  AND name NOT LIKE 'sqlite_%'
+    sqlite3_stmt *stmt;
+    if (sqlite3_prepare_v2(database.get(), count_tables, -1, &stmt, nullptr) != SQLITE_OK) {
+        qCritical() << "Error preparing statement: " << sqlite3_errmsg(database.get());
+        return -1;
+    }
+
+    int tableCount = 0;
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        tableCount = sqlite3_column_int(stmt, 0);
+    }
+
+    sqlite3_finalize(stmt);
+    return tableCount;
 }
 
 bool Database::storeQuestions(const std::list<std::pair<std::string, std::string>>& iter) {
@@ -167,4 +179,56 @@ bool Database::fetchVault(ArgonParams &argonParams, VaultParams &vaultParams) {
     sqlite3_finalize(stmt);
 
     return success;
+}
+
+bool Database::doesTableExists(const std::string &tableName) {
+    const char *check_table = "SELECT name FROM sqlite_master WHERE type = 'table' AND name = ?;";
+    sqlite3_stmt *stmt;
+
+    if (sqlite3_prepare_v2(database.get(), check_table, -1, &stmt, nullptr) != SQLITE_OK) {
+        qCritical() << "Error preparing statement:" << sqlite3_errmsg(database.get());
+        return false;
+    }
+
+    sqlite3_bind_text(stmt, 1, tableName.c_str(), -1, SQLITE_TRANSIENT);
+
+    bool exists = false;
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        exists = true;
+    }
+
+    sqlite3_finalize(stmt);
+    return exists;
+}
+
+// sanitize input
+bool Database::createDatabaseTable(const std::string &tableName) {
+    std::string new_database_table = "CREATE TABLE IF NOT EXISTS " + tableName + " (id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(128) NOT NULL, url VARCHAR(128) NOT NULL, notes TEXT);";
+    if (sqlite3_exec(database.get(), new_database_table.c_str(), nullptr, nullptr, nullptr) != SQLITE_OK) {
+        qCritical() << "Error creating database table: " << sqlite3_errmsg(database.get());
+        return false;
+    }
+    return true;
+}
+
+bool Database::getTableNames(std::vector<std::string> &tableNames) {
+    const char *get_table_names = "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT IN ('vault', 'questions_answers', 'sqlite_sequence');";
+    
+    sqlite3_stmt *stmt;
+    if (sqlite3_prepare_v2(database.get(), get_table_names, -1, &stmt, nullptr) != SQLITE_OK) {
+        qCritical() << "Error preparing statement:" << sqlite3_errmsg(database.get());
+        return false;
+    }
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        const unsigned char *name = sqlite3_column_text(stmt, 0);
+        if (name) {
+            std::string tableName(reinterpret_cast<const char *>(name));
+            qDebug() << tableName;
+            tableNames.emplace_back(tableName);
+        }
+    }
+
+    sqlite3_finalize(stmt);
+    return true;
 }
