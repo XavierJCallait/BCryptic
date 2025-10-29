@@ -47,6 +47,7 @@ add_executable(BCryptic
     src/StartupMainWindow.cpp
     src/NewItemDialog.cpp
     src/NewDatabaseSplitter.cpp
+    src/NewPasswordDialog.cpp
 
     include/EnterMasterPage.h
     include/PasswordsMainWindow.h
@@ -56,6 +57,7 @@ add_executable(BCryptic
     include/StartupMainWindow.h
     include/NewItemDialog.h
     include/NewDatabaseSplitter.h
+    include/NewPasswordDialog.h
 
     resources.qrc
 )
